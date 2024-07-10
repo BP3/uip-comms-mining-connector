@@ -1,0 +1,344 @@
+{
+  "$schema": "https://unpkg.com/@camunda/zeebe-element-templates-json-schema/resources/schema.json",
+  "name": "UiPath Comms Mining Connector",
+  "id": "cfd23a4b-730e-4b71-890c-eeb40cdd3927",
+  "version": 1717490931964,
+  "description": "Classify emails with UiPath bots with Camunda. ",
+  "icon": {
+    "contents": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAh1BMVEX////6Rhb7e2X6QAT6RBL6TyH6Qw76VS37YT/6NwD+18/6OwD9yL/8jXn8rZ/6RAf7gGf6MgD+7ur8nY7/8/D+6+f+1c3+4937emD9w7j9tKf6KgD9u6/8kn77dFn7Zkb8pJT/+Pb8iHH+3db6WTT9zcb7aUr6USj8opL6TB77b1P7g278qJp2oduWAAADMUlEQVR4nO3dbVeiQBiAYWiIGsctpwQpraT3F///71vXXZgHwuM5e4TDTPf1rYEpbkklQYsiAAAAAAAAAAAAAAAAAAAAAAAAHMV1cTKk4nrwwsKoIZli8MITFQ9JnVBIIYUUUkjhyAuTvoym8LQvIylMznr7IefpKApTCv8fhb2i8Cgo7BWFRxFY4SJftIdCKizvLq225vGqMRpQ4UKbP4fZibG5HA6ncK6qlMTKX9VwCgsT19/tXIwHU5jZ2LETtyCYwpUWhWbtFgRTuDaiUD26BSMsnNWKi+5588KtcvNvrFn45VYeYaGpz9foX93z5rY+22KrG+FWFhpxlmmEhZf1i0dmX6G7z5mq8Ek+0uipWzmYwui5LomTVKzsZeFVV+FkWc9bil0YUGE0tX+P2tRyJVcOqDDKHrW1Vn81/7wIqXArW2TtlQMr7EBhryiksFFYTpy5WDmcwnypK4E+40/coKZwMBRSSOEOhb2ikEIKdyjsFYUUhluYUUjhYCgMtTANvvCjLpSn4yVx3YW5rQY9KnxLDm3SwhXq+kyaR4UP9Salz93zpiLmpRr0qPDevQvDds8TVyXYp2rQo8I7sf3fzgbuzMRtUL+A71Gh2EN61TnPPZ8kph70qDB3m5q+dk3L3QONuq9HPSosxZUx7m4miDuq2dSjHhWKB9M4ffg+66X7FvCp8EJcwKXX7UmlO+aJkw837lNh81LRTXNO9ub2cOP6NZ8K5R1tu7mf8iljpUVgvBSLvCrM5U6MlS5WWbkdvpq8f+hELpmJSV4VRq/NNwir6vS1SRrjjQMCvwoXjZ24j36Xc/wqjNY6Pkg1j8s9K4zuTXxAoueNGb4VRg8HElPdOtzxrvBAolLtt3D5VxjNbBLvkejXeXt1Dwujm0vT3Wi6rmbzsTCKNkarVmSitL37tgMjXwu3+7Ew2lSVqdp+8bkqO9fMl6Yy9uvaWsqXdXFql1v6+Wsz7dp9O9nmorIJ8915+1DYKwqPgsJeUXgUFPaKwqOgsFc/qTD8z2sL/zP3fsLnJg6AQgoppJBCCkdZGP7/Rgj//1sAAAAAAAAAAAAAAAAAAAAAAAAE6jd4ZlitdFygTwAAAABJRU5ErkJggg=="
+  },
+  "documentationRef": "https://docs.camunda.io/docs/components/connectors/out-of-the-box-connectors/uipath/",
+  "category": {
+    "id": "connectors",
+    "name": "Connectors"
+  },
+  "appliesTo": [
+    "bpmn:Task"
+  ],
+  "elementType": {
+    "value": "bpmn:ServiceTask"
+  },
+  "groups": [
+    {
+      "id": "operation",
+      "label": "Operation"
+    },
+    {
+      "id": "authentication",
+      "label": "Authentication"
+    },
+    {
+      "id": "configuration",
+      "label": "Configuration"
+    },
+    {
+      "id": "input",
+      "label": "Input"
+    },
+    {
+      "id": "output",
+      "label": "Output"
+    },
+    {
+      "id": "errors",
+      "label": "Error handling"
+    }
+  ],
+  "properties": [
+    {
+      "type": "Hidden",
+      "value": "io.camunda:http-json:1",
+      "binding": {
+        "type": "zeebe:taskDefinition:type"
+      }
+    },
+    {
+      "label": "UiPath Operation Type",
+      "id": "operationType",
+      "group": "operation",
+      "description": "The operation in UiPath to invoke",
+      "type": "Dropdown",
+      "choices": [
+        {
+          "name": "Mine Email",
+          "value": "mineEmail"
+        }
+      ],
+      "binding": {
+        "type": "zeebe:input",
+        "name": "operationType"
+      }
+    },
+    {
+      "label": "Bearer token",
+      "group": "authentication",
+      "type": "String",
+      "feel": "optional",
+      "binding": {
+        "type": "zeebe:input",
+        "name": "token"
+      },
+      "constraints": {
+        "notEmpty": true
+      },
+      "condition": {
+        "property": "operationType",
+        "oneOf": [
+          "mineEmail"
+        ]
+      }
+    },
+    {
+      "id": "methodPost",
+      "group": "configuration",
+      "type": "Hidden",
+      "value": "post",
+      "binding": {
+        "type": "zeebe:input",
+        "name": "method"
+      },
+      "condition": {
+        "property": "operationType",
+        "oneOf": [
+          "mineEmail"
+        ]
+      }
+    },
+    {
+      "label": "UiPath instance URL",
+      "group": "configuration",
+      "type": "String",
+      "value": "cloud.uipath.com",
+      "description": "",
+      "binding": {
+        "type": "zeebe:input",
+        "name": "cloudUrl"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Uipath Organisation",
+      "group": "configuration",
+      "description": "Uipath Organisation",
+      "type": "String",
+      "feel": "optional",
+      "optional": false,
+      "binding": {
+        "type": "zeebe:input",
+        "name": "uipath_organisation"
+      },
+      "constraints": {
+        "notEmpty": true
+      },
+      "condition": {
+        "property": "operationType",
+        "oneOf": [
+          "mineEmail"
+        ]
+      }
+    },
+    {
+      "label": "Uipath Tenant",
+      "group": "configuration",
+      "description": "Uipath Tenant",
+      "type": "String",
+      "feel": "optional",
+      "optional": false,
+      "binding": {
+        "type": "zeebe:input",
+        "name": "uipath_tenant"
+      },
+      "constraints": {
+        "notEmpty": true
+      },
+      "condition": {
+        "property": "operationType",
+        "oneOf": [
+          "mineEmail"
+        ]
+      }
+    },
+    {
+      "label": "Project Name",
+      "group": "configuration",
+      "description": "Project Name",
+      "type": "String",
+      "feel": "optional",
+      "optional": false,
+      "binding": {
+        "type": "zeebe:input",
+        "name": "project_name"
+      },
+      "constraints": {
+        "notEmpty": true
+      },
+      "condition": {
+        "property": "operationType",
+        "oneOf": [
+          "mineEmail"
+        ]
+      }
+    },
+    {
+      "label": "Dataset Name",
+      "description": "Dataset Name",
+      "group": "configuration",
+      "type": "String",
+      "binding": {
+        "type": "zeebe:input",
+        "name": "dataset_name"
+      },
+      "constraints": {
+        "notEmpty": true
+      },
+      "condition": {
+        "property": "operationType",
+        "oneOf": [
+          "mineEmail"
+        ]
+      }
+    },
+    {
+      "label": "Model Verse",
+      "group": "configuration",
+      "description": "Mdel Version to Use",
+      "type": "Number",
+      "optional": false,
+      "binding": {
+        "type": "zeebe:input",
+        "name": "model_version"
+      },
+      "constraints": {
+        "notEmpty": true
+      },
+      "condition": {
+        "property": "operationType",
+        "oneOf": [
+          "mineEmail"
+        ]
+      }
+    },
+    {
+      "label": "Email Data for UiPath mining",
+      "description": "dataJson: This is the json data that is required as part of the email item that is to be mined. It should be in the csv or json format",
+      "group": "input",
+      "type": "Text",
+      "feel": "required",
+      "binding": {
+        "type": "zeebe:input",
+        "name": "emailBody"
+      },
+      "condition": {
+        "property": "operationType",
+        "oneOf": [
+          "mineEmail"
+        ]
+      },
+      "optional": true
+    },
+    {
+      "group": "configuration",
+      "type": "Hidden",
+      "value": "={\"Authorization\":\"Bearer \"+ token, \"Content-Type\":\"application/json\"}",
+      "binding": {
+        "type": "zeebe:input",
+        "name": "headers"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "group": "input",
+      "type": "Hidden",
+      "value": "={ \"documents\": [ emailBody ] }",
+      "binding": {
+        "type": "zeebe:input",
+        "name": "body"
+      },
+      "condition": {
+        "property": "operationType",
+        "oneOf": [
+          "mineEmail"
+        ]
+      },
+      "optional": true
+    },
+    {
+      "label": "Result variable",
+      "description": "Name of variable to store the response in. Details in the <a href=\"https://docs.camunda.io/docs/components/connectors/use-connectors/#result-variable\" target=\"_blank\">documentation</a>",
+      "group": "output",
+      "type": "String",
+      "binding": {
+        "type": "zeebe:taskHeader",
+        "key": "resultVariable"
+      }
+    },
+    {
+      "label": "Result expression",
+      "id": "resultExpressionGet",
+      "description": "Expression to map the response into process variables. Details in the <a href=\"https://docs.camunda.io/docs/components/connectors/use-connectors/#result-expression\" target=\"_blank\">documentation</a>",
+      "group": "output",
+      "type": "String",
+      "feel": "required",
+      "value": "=",
+      "binding": {
+        "type": "zeebe:taskHeader",
+        "key": "resultExpression"
+      },
+      "condition": {
+        "property": "operationType",
+        "oneOf": [
+          "mineEmail"
+        ]
+      }
+    },
+    {
+      "label": "Connection timeout",
+      "description": "Sets the timeout in seconds to establish a connection or 0 for an infinite timeout",
+      "group": "errors",
+      "type": "String",
+      "value": "20",
+      "binding": {
+        "type": "zeebe:input",
+        "name": "connectionTimeoutInSeconds"
+      },
+      "optional": true,
+      "feel": "optional",
+      "constraints": {
+        "notEmpty": false,
+        "pattern": {
+          "value": "^(=.+|[0-9]+|\\{\\{secrets\\..+\\}\\})$",
+          "message": "Must be a timeout in seconds (default value is 20 seconds) or a FEEL expression"
+        }
+      }
+    },
+    {
+      "type": "Hidden",
+      "value": "=\"https://\" + cloudUrl + \"/\" + uipath_organisation + \"/\" + uipath_tenant + \"/reinfer_/api/v1/datasets/\" + project_name + \"/\" + dataset_name + \"/labellers/\" + model_version + \"/predict-raw-emails\"",
+      "binding": {
+        "type": "zeebe:input",
+        "name": "url"
+      },
+      "condition": {
+        "property": "operationType",
+        "oneOf": [
+          "mineEmail"
+        ]
+      }
+    },
+    {
+      "label": "Error expression",
+      "description": "Expression to handle errors. Details in the <a href=\"https://docs.camunda.io/docs/components/connectors/use-connectors/#bpmn-errors\" target=\"_blank\">documentation</a>",
+      "group": "errors",
+      "type": "Text",
+      "feel": "required",
+      "binding": {
+        "type": "zeebe:taskHeader",
+        "key": "errorExpression"
+      }
+    }
+  ]
+}
